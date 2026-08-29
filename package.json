@@ -7,15 +7,27 @@
     "url": "https://github.com/kamaal111/anti-slop.git"
   },
   "type": "module",
-  "exports": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./effect": {
+      "types": "./dist/effect/index.d.ts",
+      "default": "./dist/effect/index.js"
+    }
+  },
   "files": [
-    "src"
+    "dist"
   ],
   "scripts": {
-    "check": "pnpm lint && pnpm test && pnpm typecheck && pnpm check:skill-assets",
+    "check": "pnpm lint && pnpm test && pnpm typecheck && pnpm build && pnpm check:skill-assets",
     "lint": "oxlint src",
     "test": "tsx src/rules/no-conditional-empty-object-spread.test.ts && tsx src/rules/no-unsafe-dictionary-type.test.ts && tsx src/rules/no-known-value-widening.test.ts && tsx src/rules/no-object-parameters.test.ts && tsx src/rules/no-runtime-typeof.test.ts && tsx src/rules/no-unknown-returns.test.ts && tsx src/rules/no-unknown-type-aliases.test.ts && tsx src/rules/no-widen-then-assert.test.ts && tsx src/rules/no-reflect-get.test.ts && tsx src/rules/no-reflect-apply.test.ts && tsx src/rules/no-module-mocking.test.ts && tsx src/rules/require-safety-comment-for-type-assertion.test.ts && tsx src/effect/rules/no-service-constructor-imports.test.ts",
     "typecheck": "tsc --noEmit",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
     "release": "sh scripts/publish.sh",
     "sync:skill-assets": "node scripts/sync-skill-assets.mjs",
     "check:skill-assets": "node scripts/sync-skill-assets.mjs --check"

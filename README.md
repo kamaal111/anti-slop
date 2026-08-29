@@ -4,7 +4,56 @@
 
 Opinionated Oxlint rules that reject low-evidence and low-signal TypeScript and JavaScript patterns.
 
-This project is meant to be vendored, not treated as a fixed npm dependency. Copy the rules into your repository, read them, and change them to match your team's standards. The bundled agent skill handles the initial copy and configuration; after that, the vendored files are yours to maintain and make your own.
+Published as `@kamaal111/oxlint-plugin-anti-slop` for repositories that want to track upstream releases as a normal npm dependency. If you'd rather read, tweak, and own the rules directly, vendor the source instead — the bundled agent skill handles the initial copy and configuration.
+
+## Install as an npm dependency
+
+```bash
+npm install --save-dev @kamaal111/oxlint-plugin-anti-slop
+```
+
+Register it in `oxlint.config.ts`:
+
+```ts
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  jsPlugins: [
+    { name: "anti-slop", specifier: "@kamaal111/oxlint-plugin-anti-slop" },
+  ],
+  rules: {
+    "anti-slop/no-chained-type-assertions": "error",
+    "anti-slop/no-conditional-empty-object-spread": "error",
+    "anti-slop/no-known-value-widening": "error",
+    "anti-slop/no-module-mocking": "error",
+    "anti-slop/no-object-parameters": "error",
+    "anti-slop/no-reflect-apply": "error",
+    "anti-slop/no-reflect-get": "error",
+    "anti-slop/no-runtime-typeof": "error",
+    "anti-slop/no-shape-in-symbol-names": "error",
+    "anti-slop/no-unknown-parameters": "error",
+    "anti-slop/no-unknown-returns": "error",
+    "anti-slop/no-unknown-type-aliases": "error",
+    "anti-slop/no-unsafe-dictionary-type": "error",
+    "anti-slop/no-widen-then-assert": "error",
+    "anti-slop/require-safety-comment-for-type-assertion": "error"
+  }
+});
+```
+
+The optional Effect rules live at the `@kamaal111/oxlint-plugin-anti-slop/effect` subpath:
+
+```ts
+export default defineConfig({
+  jsPlugins: [
+    { name: "anti-slop", specifier: "@kamaal111/oxlint-plugin-anti-slop" },
+    { name: "anti-slop-effect", specifier: "@kamaal111/oxlint-plugin-anti-slop/effect" }
+  ],
+  rules: {
+    "anti-slop-effect/no-service-constructor-imports": "error"
+  }
+});
+```
 
 ## Install with an agent skill
 
