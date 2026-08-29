@@ -1,0 +1,24 @@
+package.json
+  s_4c2f9f8da66a40::t_b38bbfe09fb08e 10-21,23,26,30
+tsconfig.build.json
+  s_4c2f9f8da66a40::t_e95300058fe6b2 1-8,10-13
+  s_4c2f9f8da66a40::t_0524e9ba1e540e 9
+README.md
+  s_4c2f9f8da66a40::t_85472387a3732d 7-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "b6a92862d897ba853ac51e8ef36fedf87095dbc5",
+  "prompts": {},
+  "sessions": {
+    "s_4c2f9f8da66a40": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ed9ca876-f3d4-440f-89a4-3ef275cdd467",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Kamaal Farah <kamaal.f1@gmail.com>"
+    }
+  }
+}
