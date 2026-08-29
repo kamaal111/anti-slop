@@ -1,0 +1,39 @@
+pnpm-workspace.yaml
+  s_7dfdb441ce905d::t_69c4032686b284 1-2
+.github/workflows/release-npm.yml
+  s_f4df75400ef081::t_da3a695b6aac5f 1-17,19-20,22-26,28-43
+  s_f4df75400ef081::t_0b55345979b75e 18,21,27
+package.json
+  s_f4df75400ef081::t_da3a695b6aac5f 5-7
+  s_f4df75400ef081::t_2cb7bc5ad7bee5 8
+scripts/publish.sh
+  s_f4df75400ef081::t_da3a695b6aac5f 1-12
+  s_f4df75400ef081::t_f5d4bee17037a8 13-20
+.gitignore
+  s_f4df75400ef081::t_d1a4a51cd4f5dd 5
+  s_f4df75400ef081::t_b6181d45eaa394 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "570b72ed553117aa00143d7453fa26f14f657567",
+  "prompts": {},
+  "sessions": {
+    "s_7dfdb441ce905d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a04d14-7e36-72d0-a25a-e4cd01e3bc8a",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Kamaal Farah <kamaal.f1@gmail.com>"
+    },
+    "s_f4df75400ef081": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a04d39-8653-7170-9175-e29740580b42",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": null
+    }
+  }
+}
