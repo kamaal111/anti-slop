@@ -4,6 +4,8 @@
 
 Opinionated Oxlint rules that reject low-evidence and low-signal TypeScript and JavaScript patterns.
 
+> **Fork and attribution:** This project is an independently maintained fork by [Kamaal](https://github.com/kamaal111) of [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop). Credit for the original project must remain with [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop).
+
 Published as `@kamaal111/oxlint-plugin-anti-slop` for repositories that want to track upstream releases as a normal npm dependency. If you'd rather read, tweak, and own the rules directly, vendor the source instead — the bundled agent skill handles the initial copy and configuration.
 
 ## Install as an npm dependency
