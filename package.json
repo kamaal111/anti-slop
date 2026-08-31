@@ -1,6 +1,6 @@
 {
   "name": "@kamaal111/oxlint-plugin-anti-slop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Opinionated Oxlint rules that reject low-evidence TypeScript and JavaScript patterns.",
   "repository": {
     "type": "git",
