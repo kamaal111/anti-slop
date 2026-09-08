@@ -76,6 +76,12 @@ npx skills add dmmulroy/anti-slop --skill install-anti-slop
 
 Then ask your coding agent to install or configure anti-slop in the current repository. The skill copies the plugin, installs compatible Oxlint dependencies—matching an existing Oxlint version when present—merges the plugin into the existing lint configuration, enables every generic rule, and validates the result. In repositories that depend directly on Effect, it also enables the opt-in Effect rule group.
 
+### Update an existing installation
+
+Ask your agent to **update anti-slop while preserving local customizations**, optionally naming an upstream revision or selected fixes. The same skill stages incoming source separately, uses a three-way merge when the original upstream snapshot is recoverable, and otherwise ports reviewed changes conservatively. It preserves local rules and configuration, asks about conflicting policy and enabling new rules, and records provenance for future updates. It does not force-replace the vendored directory.
+
+For latest upstream, ask the agent to retrieve and identify that revision; an already-installed skill bundle may be older. The copy script itself does not fetch or merge updates.
+
 To inspect available skills first:
 
 ```bash
@@ -110,6 +116,9 @@ export default defineConfig({
     { name: "anti-slop", specifier: "./tools/oxlint/anti-slop/index.ts" },
   ],
   rules: {
+    "oxc/no-accumulating-spread": "error",
+    "anti-slop/no-array-filter-map": "error",
+    "anti-slop/no-reduce-accumulator-copy": "error",
     "anti-slop/no-chained-type-assertions": "error",
     "anti-slop/no-conditional-empty-object-spread": "error",
     "anti-slop/no-known-value-widening": "error",
@@ -154,6 +163,8 @@ export default defineConfig({
 
 ### Generic rules
 
+- `no-array-filter-map` — rejects adjacent eager array filter/map passes while allowing lazy iterator pipelines.
+- `no-reduce-accumulator-copy` — rejects non-spread accumulator copies inside reducers; complements native `oxc/no-accumulating-spread`.
 - `no-chained-type-assertions` — rejects nested `as` and angle-bracket assertions that fabricate evidence; chains made only of `as const` remain valid.
 - `no-conditional-empty-object-spread` — reports object spreads that use a conditional `{}` branch to omit fields. It intentionally has no autofix because omission is not equivalent to assigning `undefined`.
 - `no-known-value-widening` — rejects known expressions flowing into explicit `unknown`, `object`, anonymous-object, or open-dictionary targets, including known arguments passed to local `unknown` type predicates. Empty dictionary accumulators and finite-key `Record` targets remain valid.
@@ -181,6 +192,54 @@ The rules use Oxlint's ESTree and lexical-scope APIs rather than a TypeScript ty
 ## Violation examples
 
 Each snippet below is rejected by the named rule.
+
+### `no-array-filter-map`
+
+```ts
+const users: User[] = loadUsers();
+const emails = users.filter(user => user.active).map(user => user.email);
+const found = users.map(lookup).filter(value => value !== undefined);
+```
+
+Prefer lazy iterator helpers where the target runtime supports them:
+
+```ts
+const emails = users.values()
+  .filter(user => user.active)
+  .map(user => user.email)
+  .toArray();
+```
+
+A single `flatMap(user => user.active ? [user.email] : [])` or a reducer that pushes into a fresh local array is also allowed. Iterator helpers avoid intermediate arrays and per-item wrapper arrays, but are not guaranteed to be faster. Check runtime support; TypeScript library declarations do not polyfill them.
+
+This AST/scope rule recognizes array literals, direct array/tuple annotations, immutable local aliases, and supported array-preserving method chains. Unknown receivers (including imported factory results and unannotated parameters), type aliases, and property-based array types are not inferred. Iterator pipelines are not flagged. Both `filter().map()` and `map().filter()` are covered, regardless of predicate. There is no autofix: callback ordering, indexes, `thisArg`, sparse arrays, and truthiness filtering must be reviewed before changing APIs.
+
+### `no-reduce-accumulator-copy`
+
+```ts
+items.reduce((acc, item) => Object.assign({}, acc, { [item.id]: item }), {});
+items.reduce((acc, item) => acc.concat([item]), []);
+items.reduce((acc, item) => {
+  const next = acc.slice();
+  next.push(item);
+  return next;
+}, []);
+```
+
+Instead, mutate a fresh, locally owned accumulator and return it:
+
+```ts
+items.reduce((acc, item) => {
+  acc.push(item);
+  return acc;
+}, []);
+```
+
+`Object.assign(acc, item)` is also allowed. Copying individual input items is not copying accumulated state.
+
+The rule covers inline `reduce`/`reduceRight` callbacks, including index parameters, and immutable local accumulator aliases. It detects global `Object.assign` with an object-literal target and the accumulator as a source, global `Array.from(acc)`, and array accumulator calls to `concat`, `slice`, `toSpliced`, `toSorted`, `toReversed`, and `with`. Array copy methods require local array evidence for the initial value so string concatenation and unknown custom collections are not flagged. Like the native rule, reducer method names are syntactic evidence, not proof of the receiver's runtime type. Named callbacks, nested functions, indirect copy helpers, nested accumulator properties, and reassigned aliases are outside its scope. Copying a bounded accumulator is not necessarily quadratic, but these patterns are rejected because growing accumulators can be.
+
+Enable native `oxc/no-accumulating-spread` alongside it for array/object spreads in reducers and supported loops. Neither rule proves that every possible quadratic reduction is absent. No automatic mutation rewrite is provided because accumulator ownership cannot be established syntactically.
 
 ### `no-chained-type-assertions`
 
