@@ -133,6 +133,7 @@ export default defineConfig({
     "anti-slop/no-unknown-type-aliases": "error",
     "anti-slop/no-unsafe-dictionary-type": "error",
     "anti-slop/no-widen-then-assert": "error",
+    "anti-slop/require-readable-spacing": "error",
     "anti-slop/require-safety-comment-for-type-assertion": "error"
   }
 });
@@ -179,6 +180,7 @@ export default defineConfig({
 - `no-unknown-type-aliases` — rejects scoped and transparent generic aliases whose resolved type is `unknown`.
 - `no-unsafe-dictionary-type` — rejects dictionary value contracts based on `unknown`, `any`, `object`, `{}`, and semantic equivalents. Generic constraints such as `T extends Record<string, unknown>` are allowed.
 - `no-widen-then-assert` — rejects immutable local flows that widen known evidence to `unknown`, `any`, `object`, or a broad record and later assert it back to a narrower type.
+- `require-readable-spacing` — autofixes missing blank lines between top-level declarations, around multiline bindings, before control flow/returns, and after blocks; preserves compact local bindings, imports, and overload groups.
 - `require-safety-comment-for-type-assertion` — requires each non-const assertion to have a nearby, non-empty invariant justification. Marker prefixes are configurable and default to `SAFETY`.
 
 ### Effect rules
@@ -379,6 +381,20 @@ const loaded: User = loadUser();
 const stored: unknown = loaded;
 const user = stored as User;
 ```
+
+### `require-readable-spacing`
+
+```ts
+export const first = 1;
+/** Documentation stays attached to second. */
+export const second = 2;
+```
+
+Autofix inserts a blank line before the documentation. Inside functions, adjacent short variable declarations stay grouped, while multiline bindings and control-flow boundaries receive spacing. Adjacent function overload signatures and their implementation remain grouped. Existing blank lines are never removed. The rule takes no options; edit the vendored policy if your team's preferences differ.
+
+Run `oxlint --fix` (or `vp lint --fix`), then your formatter, then lint again. The rule inserts whitespace only; it does not add braces, wrap expressions, sort imports, or infer every logical group. Keep indentation and wrapping with the formatter rather than enabling a competing stylistic preset.
+
+The comment-aware engine is [vendored from ESLint Stylistic](src/vendor/eslint-stylistic/UPSTREAM.md) under MIT. Copy its `LICENSE` and provenance along with the code; no third-party plugin dependency is needed.
 
 ### `require-safety-comment-for-type-assertion`
 
