@@ -354,19 +354,61 @@ Import the owning Layer and yield `IssueService` instead. Focused `*.test.*` and
 
 ### Effect: tagged values and matching
 
+Direct tag checks are rejected by `no-manual-tag-comparison`:
+
 ```ts
 if (result._tag === "Ready") useReady(result);
+```
 
+Use `Predicate.isTagged` for a predicate or `Match` for branching:
+
+```ts
+if (Predicate.isTagged("Ready")(result)) useReady(result);
+```
+
+Literal tag objects are rejected by `no-manual-tagged-construction`:
+
+```ts
 const result = { _tag: "Ready", value };
+```
 
-Effect.catch((error) =>
-  error._tag === "NotFound" ? recover : Effect.fail(error)
+Use the existing Schema, tagged class/error, or `Data.taggedEnum` constructor instead, such as `Ready.make({ value })`. Object patterns passed directly to `Match.when` and `Match.not` remain allowed.
+
+Manual tag branching in broad catch handlers is rejected by `no-manual-effect-error-tag`:
+
+```ts
+program.pipe(
+  Effect.catch((error) =>
+    error._tag === "NotFound" ? recover : Effect.fail(error)
+  )
 );
+```
 
+Use the selective error operator:
+
+```ts
+program.pipe(Effect.catchTag("NotFound", () => recover));
+```
+
+For a tagged `error.reason`, use `Effect.catchReason` or `Effect.catchReasons`.
+
+Repeated literal ternaries over the same value are rejected by `prefer-effect-match`:
+
+```ts
 const label = kind === "a" ? "A" : kind === "b" ? "B" : "Other";
 ```
 
-Use `Predicate.isTagged` for reusable predicates, `Match` or tagged-enum matching for branching, tagged constructors for values, and `Effect.catchTag`/`Effect.catchTags` for tagged errors.
+Use `Match`:
+
+```ts
+const label = Match.value(kind).pipe(
+  Match.when("a", () => "A"),
+  Match.when("b", () => "B"),
+  Match.orElse(() => "Other")
+);
+```
+
+These rules are syntactic. They recognize direct `Effect.catch*` and `Match.when`/`Match.not` calls under those exact identifiers and do not resolve import aliases or verify that similarly named objects came from Effect. `prefer-effect-match` compares the source text of the repeatedly tested expression; it does not infer its type or prove exhaustiveness.
 
 ### `no-unknown-parameters`
 
