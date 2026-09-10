@@ -1,0 +1,21 @@
+README.md
+  s_9b2021ce3e682f::t_bf60956a3de70c 7-9
+package.json
+  s_9b2021ce3e682f::t_bf60956a3de70c 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "b7a56bbf5f2125513b01c5777cb3a1d318996522",
+  "prompts": {},
+  "sessions": {
+    "s_9b2021ce3e682f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a08d29-c10a-7590-aff0-33dbe1fa7f43",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Kamaal Farah <kamaal.f1@gmail.com>"
+    }
+  }
+}

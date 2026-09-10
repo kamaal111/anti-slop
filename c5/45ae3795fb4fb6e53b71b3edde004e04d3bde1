@@ -1,0 +1,33 @@
+tsconfig.build.json
+  s_4c2f9f8da66a40::t_e95300058fe6b2 1-8,10-13
+  s_4c2f9f8da66a40::t_0524e9ba1e540e 9
+README.md
+  s_4c2f9f8da66a40::t_85472387a3732d 10-26,30-43,45-58,64-66
+  s_9b2021ce3e682f::t_d4afd99e224e2c 27-29,44,59-63
+package.json
+  s_4c2f9f8da66a40::t_b38bbfe09fb08e 10-21,23,26,31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "c545ae3795fb4fb6e53b71b3edde004e04d3bde1",
+  "prompts": {},
+  "sessions": {
+    "s_4c2f9f8da66a40": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ed9ca876-f3d4-440f-89a4-3ef275cdd467",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Kamaal Farah <kamaal.f1@gmail.com>"
+    },
+    "s_9b2021ce3e682f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a08d29-c10a-7590-aff0-33dbe1fa7f43",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Kamaal Farah <kamaal.f1@gmail.com>"
+    }
+  }
+}
