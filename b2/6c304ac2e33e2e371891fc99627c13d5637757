@@ -1,0 +1,19 @@
+LICENSE
+  s_a53e8d139dc99c::t_e7a771d8e92ba8 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "b26c304ac2e33e2e371891fc99627c13d5637757",
+  "prompts": {},
+  "sessions": {
+    "s_a53e8d139dc99c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f868deea-7fc5-48cd-a2b8-76436d24b4f6",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Kamaal Farah <kamaal.f1@gmail.com>"
+    }
+  }
+}
